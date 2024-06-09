@@ -1,0 +1,55 @@
+.conversation-list-container {
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-y: auto;
+  height: calc(100vh - 8rem); /* Adjust for headers and padding */
+}
+
+.conversation-list-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.conversation-list {
+  list-style: none;
+  padding: 0;
+}
+
+.conversation-item {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+  display: flex; /* Added for avatar alignment */
+  align-items: center;
+}
+
+.conversation-item:hover {
+  background-color: #eee;
+}
+
+.conversation-participant {
+  flex: 1; /* Allow participant info to fill remaining space */
+}
+
+.conversation-participant img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 1rem; /* Margin for spacing */
+}
+
+.conversation-preview {
+  color: #333; /* Adjust text color for better readability */
+}
+
+.unread-count {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}

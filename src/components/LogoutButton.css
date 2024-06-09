@@ -1,0 +1,13 @@
+.logout-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #aaa; /* Light gray background */
+    color: #fff; /* White text color */
+    cursor: pointer; /* Indicate clickable element */
+    transition: all 0.2s ease-in-out; /* Add hover effect */
+  
+    &:hover {
+      background-color: #888; /* Darker gray on hover */
+    }
+  }
