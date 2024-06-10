@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import "./chatInput.css";
+import './chatInput.css';
+
 const ChatInput = ({ onSendMessage }) => {
   const [message, setMessage] = useState('');
 
@@ -7,7 +8,7 @@ const ChatInput = ({ onSendMessage }) => {
     e.preventDefault();
     if (message.trim() !== '') {
       onSendMessage(message);
-      setMessage(''); // Clear the input after sending
+      setMessage('');
     }
   };
 
@@ -18,9 +19,11 @@ const ChatInput = ({ onSendMessage }) => {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type your message..."
-        className="chat-input" // Add a class to the input
+        className="chat-input"
       />
-      <button type="submit" className="send-button">Send</button>
+      <button type="submit" className="send-button">
+        Send
+      </button>
     </form>
   );
 };
