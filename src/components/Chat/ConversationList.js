@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './conversationList.css';
 import Fuse from 'fuse.js';
+import { formatRelativeTime } from './utils';
 
 const ConversationList = ({ conversations, onSelectConversation, selectedConversation, loggedInUser }) => {
   const [filteredConversations, setFilteredConversations] = useState(conversations);
@@ -25,13 +26,7 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
     }
 
     const otherParticipants = participantNames.filter(name => name !== loggedInUser.name);
-    if (otherParticipants.length === 0) {
-      return 'No messages yet';
-    } else if (otherParticipants.length === 1) {
-      return otherParticipants[0];
-    } else {
-      return `${otherParticipants[0]}, ${otherParticipants.length - 1} others`;
-    }
+    return otherParticipants.join(', ');
   };
 
   return (
@@ -44,34 +39,36 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <ul>
+      <ul className="conversation-list">
         {filteredConversations.map((conversation) => (
           <li
             key={conversation.id}
             onClick={() => onSelectConversation(conversation)}
             className={`conversation-item ${selectedConversation?.id === conversation.id ? 'active' : ''}`}
           >
-            <div className="avatar">
+            <div className="conversation-avatar">
               {conversation.avatarUrl ? (
                 <img src={conversation.avatarUrl} alt="Avatar" />
               ) : (
-                renderParticipantNames(conversation.participants).charAt(0).toUpperCase()
+                <div className="default-avatar">
+                  {renderParticipantNames(conversation.participants).charAt(0).toUpperCase()}
+                </div>
               )}
             </div>
             <div className="conversation-details">
-              <div className="name">{renderParticipantNames(conversation.participants)}</div>
-              <div className="last-message">
-                {conversation.lastMessage
-                  ? `${conversation.lastMessage.slice(0, 20)}${conversation.lastMessage.length > 20 ? '...' : ''}`
-                  : 'No messages yet'}
-              </div>
-              <div className="timestamp">
-                {conversation.lastMessageTimestamp && new Date(conversation.lastMessageTimestamp.toDate()).toLocaleString()}
+              <div className="conversation-name">{renderParticipantNames(conversation.participants)}</div>
+              <div className="conversation-last-message">
+                {conversation.lastMessage}
               </div>
             </div>
-            {conversation.unreadCount > 0 && (
-              <div className="unread-count">{conversation.unreadCount}</div>
-            )}
+            <div className="conversation-meta">
+              <div className="conversation-timestamp">
+              {conversation.lastMessageTimestamp ? formatRelativeTime(conversation.lastMessageTimestamp) : ''}
+              </div>
+              {conversation.unreadCount > 0 && (
+                <div className="unread-count">{conversation.unreadCount}</div>
+              )}
+            </div>
           </li>
         ))}
       </ul>
