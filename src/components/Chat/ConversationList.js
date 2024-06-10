@@ -1,3 +1,4 @@
+// ConversationList.js
 import React, { useState, useEffect } from 'react';
 import './conversationList.css';
 import Fuse from 'fuse.js';
@@ -34,7 +35,7 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
       <div className="search-bar">
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="Search conversations..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -63,7 +64,7 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
             </div>
             <div className="conversation-meta">
               <div className="conversation-timestamp">
-              {conversation.lastMessageTimestamp ? formatRelativeTime(conversation.lastMessageTimestamp) : ''}
+                {conversation.lastMessageTimestamp ? formatRelativeTime(conversation.lastMessageTimestamp) : ''}
               </div>
               {conversation.unreadCount > 0 && (
                 <div className="unread-count">{conversation.unreadCount}</div>

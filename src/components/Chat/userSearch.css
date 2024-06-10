@@ -1,0 +1,69 @@
+/* userSearch.css */
+.user-search {
+    margin-bottom: 20px;
+  }
+  
+  .user-search form {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-search input {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  .user-search button {
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .search-results {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .search-results li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .search-results li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    overflow: hidden;
+  }
+  
+  .user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .default-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ccc;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .user-name {
+    font-size: 16px;
+  }
