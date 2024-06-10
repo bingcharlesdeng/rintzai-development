@@ -1,55 +1,111 @@
 .conversation-list-container {
-  padding: 1rem;
-  border-radius: 4px;
-  overflow-y: auto;
-  height: calc(100vh - 8rem); /* Adjust for headers and padding */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.conversation-list-header {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #ddd;
+.search-bar {
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 .conversation-list {
-  list-style: none;
+  list-style-type: none;
   padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .conversation-item {
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.2s ease;
-  display: flex; /* Added for avatar alignment */
+  display: flex;
   align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .conversation-item:hover {
-  background-color: #eee;
+  background-color: #f5f5f5;
 }
 
-.conversation-participant {
-  flex: 1; /* Allow participant info to fill remaining space */
+.conversation-item.active {
+  background-color: #e0e0e0;
 }
 
-.conversation-participant img {
-  width: 32px;
-  height: 32px;
+.conversation-avatar {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  margin-right: 1rem; /* Margin for spacing */
+  overflow: hidden;
+  margin-right: 12px;
 }
 
-.conversation-preview {
-  color: #333; /* Adjust text color for better readability */
+.conversation-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.default-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #2196f3;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.conversation-details {
+  flex: 1;
+}
+
+.conversation-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.conversation-last-message {
+  font-size: 14px;
+  color: #777;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.conversation-timestamp {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 4px;
 }
 
 .unread-count {
-  background-color: #e74c3c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: #ff5722;
   color: #fff;
-  padding: 2px 5px;
+  font-size: 12px;
+  font-weight: bold;
   border-radius: 50%;
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
 }

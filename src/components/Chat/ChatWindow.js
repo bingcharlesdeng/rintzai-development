@@ -1,3 +1,4 @@
+// ChatWindow.js
 import React, { useEffect, useRef } from 'react';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase';
@@ -9,21 +10,17 @@ const ChatWindow = ({ selectedConversation, loggedInUser }) => {
 
   useEffect(() => {
     if (selectedConversation) {
-      console.log(selectedConversation, "selected Conversation");
       const messagesQuery = query(
         collection(db, 'messages'),
         where('conversationId', '==', selectedConversation.id),
         orderBy('timestamp', 'asc')
       );
-      console.log(messagesQuery, "messageQuery");
-      
 
       const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
         const fetchedMessages = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        console.log(fetchedMessages, "fetchedMessages");
         setMessages(fetchedMessages);
       });
 
@@ -31,7 +28,6 @@ const ChatWindow = ({ selectedConversation, loggedInUser }) => {
         unsubscribe();
       };
     } else {
-      console.log("or else");
       setMessages([]);
     }
   }, [selectedConversation]);
@@ -44,9 +40,7 @@ const ChatWindow = ({ selectedConversation, loggedInUser }) => {
 
   return (
     <div className="chat-window">
-      
       <div className="message-list" ref={messageListRef}>
-        {console.log("messages", messages)}
         {messages.map((message) => (
           <div
             key={message.id}

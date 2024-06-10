@@ -49,4 +49,21 @@ const fetchConversationsForUser = async (userId) => {
 };
 
 
-export { fetchMessages, sendMessage, fetchConversationsForUser };
+const createNewConversation = async (userId1, userId2) => {
+  try {
+    const conversationsRef = collection(db, 'conversations');
+    const newConversation = {
+      participants: [userId1, userId2],
+      lastMessage: '',
+      lastMessageTimestamp: null,
+    };
+    const docRef = await addDoc(conversationsRef, newConversation);
+    return { id: docRef.id, ...newConversation };
+  } catch (error) {
+    console.error('Error creating new conversation:', error);
+    throw error;
+  }
+};
+
+export { fetchMessages, sendMessage, fetchConversationsForUser, createNewConversation };
+
