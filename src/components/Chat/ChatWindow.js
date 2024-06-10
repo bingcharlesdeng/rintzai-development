@@ -1,35 +1,64 @@
-import React from 'react';
-import "./chatWindow.css";
-const ChatWindow = ({ messages, selectedConversation }) => {
-  const messageListRef = React.createRef();
+import React, { useEffect, useRef } from 'react';
+import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { db } from '../../firebase';
+import './chatWindow.css';
 
-  React.useEffect(() => {
-    // Scroll to the bottom whenever new messages are received or on component mount
-    messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+const ChatWindow = ({ selectedConversation, loggedInUser }) => {
+  const [messages, setMessages] = React.useState([]);
+  const messageListRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedConversation) {
+      console.log(selectedConversation, "selected Conversation");
+      const messagesQuery = query(
+        collection(db, 'messages'),
+        where('conversationId', '==', selectedConversation.id),
+        orderBy('timestamp', 'asc')
+      );
+      console.log(messagesQuery, "messageQuery");
+      
+
+      const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+        const fetchedMessages = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        console.log(fetchedMessages, "fetchedMessages");
+        setMessages(fetchedMessages);
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    } else {
+      console.log("or else");
+      setMessages([]);
+    }
+  }, [selectedConversation]);
+
+  useEffect(() => {
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    }
   }, [messages]);
 
   return (
     <div className="chat-window">
-      <ul ref={messageListRef} className="message-list">
-        {messages.length > 0 ? (
-          messages.map((message) => (
-            <li key={message.id} className={`message ${message.isSent ? 'sent' : 'received'}`}>
-              {message.senderName && (
-                <div className="message-sender">
-                  {message.senderAvatar && <img src={message.senderAvatar} alt="Sender Avatar" />}
-                  <span>{message.senderName}</span>
-                </div>
-              )}
-              <div className="message-content">{message.content}</div>
-              {message.timestamp && <span className="message-timestamp">{message.timestamp}</span>}
-            </li>
-          ))
-        ) : (
-          <div className="empty-chat-placeholder">
-            {selectedConversation ? "No messages yet in this conversation. Start typing!" : "Select a conversation to start chatting."}
+      
+      <div className="message-list" ref={messageListRef}>
+        {console.log("messages", messages)}
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`message ${message.senderId === loggedInUser.id ? 'sent' : 'received'}`}
+          >
+            <div className="message-content">{message.content}</div>
+            <div className="message-timestamp">
+              {message.timestamp ? new Date(message.timestamp.toDate()).toLocaleString() : ''}
+            </div>
           </div>
-        )}
-      </ul>
+        ))}
+      </div>
     </div>
   );
 };

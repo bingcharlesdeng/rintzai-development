@@ -1,8 +1,9 @@
-import { db, collection, getDocs, query, where, writeBatch } from '../../firebase'; // Assuming relative path
+import { db, collection, getDocs, query, where, addDoc, serverTimestamp, orderBy, doc, updateDoc } from '../../firebase';
+
 
 const fetchMessages = async (conversationId) => {
   const messagesRef = collection(db, 'messages');
-  const q = query(messagesRef, where('conversationId', '==', conversationId));
+  const q = query(messagesRef, where('conversationId', '==', conversationId), orderBy('timestamp', 'asc'));
   const querySnapshot = await getDocs(q);
   const fetchedMessages = [];
   querySnapshot.forEach((doc) => {
@@ -11,26 +12,41 @@ const fetchMessages = async (conversationId) => {
   return fetchedMessages;
 };
 
-const sendMessage = async (message, conversationId) => {
+const sendMessage = async (message, conversationId, senderId) => {
   try {
-    const batch = writeBatch(db);
     const messagesRef = collection(db, 'messages');
-
     const newMessage = {
-      content: message,
       conversationId,
-      timestamp: Date.now(), // Use server timestamp
-      // Add other message properties if needed (e.g., sender)
+      senderId,
+      content: message,
+      timestamp: serverTimestamp(),
     };
+    await addDoc(messagesRef, newMessage);
 
-    batch.set(messagesRef.doc(), newMessage);
-    await batch.commit();
-    console.log('Message sent!'); 
-    return true;// Consider returning a success message or promise
+    const conversationRef = doc(db, 'conversations', conversationId);
+    await updateDoc(conversationRef, {
+      lastMessage: message,
+      lastMessageTimestamp: serverTimestamp(),
+    });
+
+    console.log('Message sent!');
   } catch (error) {
     console.error('Error sending message:', error);
-    return false;
+    throw error;
   }
 };
 
-export { fetchMessages, sendMessage };
+
+const fetchConversationsForUser = async (userId) => {
+  const conversationsRef = collection(db, 'conversations');
+  const q = query(conversationsRef, where('participants', 'array-contains', userId));
+  const querySnapshot = await getDocs(q);
+  const fetchedConversations = [];
+  querySnapshot.forEach((doc) => {
+    fetchedConversations.push({ id: doc.id, ...doc.data() });
+  });
+  return fetchedConversations;
+};
+
+
+export { fetchMessages, sendMessage, fetchConversationsForUser };
