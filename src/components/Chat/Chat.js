@@ -1,39 +1,42 @@
 // Chat.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from './ChatWindow';
 import ConversationList from './ConversationList';
 import ChatInput from './ChatInput';
 import UserSearch from './UserSearch';
 import NewChatModal from './NewChatModal';
 import { sendMessage, fetchConversationsForUser, createNewConversation } from './messageService';
-import { db, collection, query, where, orderBy, onSnapshot } from '../../firebase';
+import { db, collection, onSnapshot, query, where } from '../../firebase';
 import './chat.css';
+import UserContext from '../UserContext';
 
 const Chat = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [conversations, setConversations] = useState([]);
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
-
-
-  const loggedInUser = {
-    id: 'charles',
-    name: 'Charles',
-    // Add other user properties if needed
-  };
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'conversations'), (snapshot) => {
-      const updatedConversations = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setConversations(updatedConversations);
-    });
+    const fetchUserConversations = async () => {
+      if (user) {
+        const conversationsRef = collection(db, 'conversations');
+        const q = query(conversationsRef, where('participants', 'array-contains', user.uid));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          const updatedConversations = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setConversations(updatedConversations);
+        });
 
-    return () => {
-      unsubscribe();
+        return () => {
+          unsubscribe();
+        };
+      }
     };
-  }, []);
+
+    fetchUserConversations();
+  }, [user]);
 
   const handleNewChat = () => {
     setIsNewChatModalOpen(true);
@@ -42,11 +45,16 @@ const Chat = () => {
   const handleCloseNewChatModal = () => {
     setIsNewChatModalOpen(false);
   };
-  
+
   const handleStartChat = async (selectedUser) => {
-    // ... (create a new conversation with the selected user)
-    setIsNewChatModalOpen(false);
-    // ... (navigate back to the main chat screen and select the new conversation)
+    try {
+      const newConversation = await createNewConversation(user.uid, selectedUser.id);
+      setSelectedConversation(newConversation);
+      handleCloseNewChatModal();
+    } catch (error) {
+      console.error('Error creating new conversation:', error);
+      // Handle error (e.g., display error message to user)
+    }
   };
 
   const handleSelectConversation = (conversation) => {
@@ -55,26 +63,28 @@ const Chat = () => {
 
   const handleSendMessage = (message) => {
     if (selectedConversation) {
-      sendMessage(message, selectedConversation.id, loggedInUser.id)
+      sendMessage(message, selectedConversation.id, user.uid)
         .catch((error) => {
           console.error('Error sending message:', error);
+          // Handle error (e.g., display error message to user)
         });
     }
   };
 
   const handleSelectUser = async (user) => {
     const existingConversation = conversations.find((conversation) =>
-      conversation.participants.includes(user.id) && conversation.participants.includes(loggedInUser.id)
+      conversation.participants.includes(user.id) && conversation.participants.includes(user.uid)
     );
 
     if (existingConversation) {
       setSelectedConversation(existingConversation);
     } else {
       try {
-        const newConversation = await createNewConversation(user.id, loggedInUser.id);
+        const newConversation = await createNewConversation(user.id, user.uid);
         setSelectedConversation(newConversation);
       } catch (error) {
         console.error('Error creating new conversation:', error);
+        // Handle error (e.g., display error message to user)
       }
     }
   };
@@ -82,23 +92,27 @@ const Chat = () => {
   return (
     <div className="chat-app">
       <div className="sidebar">
-      <button className="new-chat-button" onClick={handleNewChat}>New Chat</button>
-      {isNewChatModalOpen && (
-      <NewChatModal onClose={handleCloseNewChatModal} onStartChat={handleStartChat} />
-    )}
-
+        <div className="header">
+          <h1>Chats</h1>
+          <button className="new-chat-button" onClick={handleNewChat}>
+            New Chat
+          </button>
+        </div>
+        {isNewChatModalOpen && (
+          <NewChatModal onClose={handleCloseNewChatModal} onStartChat={handleStartChat} />
+        )}
         <UserSearch onSelectUser={handleSelectUser} />
         <ConversationList
           conversations={conversations}
           onSelectConversation={handleSelectConversation}
           selectedConversation={selectedConversation}
-          loggedInUser={loggedInUser}
+          loggedInUser={user}
         />
       </div>
       <div className="chat-area">
         {selectedConversation ? (
           <>
-            <ChatWindow selectedConversation={selectedConversation} loggedInUser={loggedInUser} />
+            <ChatWindow selectedConversation={selectedConversation} loggedInUser={user} />
             <ChatInput onSendMessage={handleSendMessage} />
           </>
         ) : (

@@ -22,7 +22,7 @@ const ChatInput = ({ onSendMessage }) => {
         placeholder="Type your message..."
         className="chat-input"
       />
-      <button type="submit" className="send-button">
+      <button type="submit" className="chat-send-button">
         Send
       </button>
     </form>

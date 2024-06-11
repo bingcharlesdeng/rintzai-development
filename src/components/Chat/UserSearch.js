@@ -14,6 +14,7 @@ const UserSearch = ({ onSelectUser }) => {
       setSearchResults(results);
     } catch (error) {
       console.error('Error searching users:', error);
+      // Handle error (e.g., display error message to user)
     }
   };
 

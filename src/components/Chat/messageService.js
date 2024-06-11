@@ -1,6 +1,5 @@
 import { db, collection, getDocs, query, where, addDoc, serverTimestamp, orderBy, doc, updateDoc } from '../../firebase';
 
-
 const fetchMessages = async (conversationId) => {
   const messagesRef = collection(db, 'messages');
   const q = query(messagesRef, where('conversationId', '==', conversationId), orderBy('timestamp', 'asc'));
@@ -36,7 +35,6 @@ const sendMessage = async (message, conversationId, senderId) => {
   }
 };
 
-
 const fetchConversationsForUser = async (userId) => {
   const conversationsRef = collection(db, 'conversations');
   const q = query(conversationsRef, where('participants', 'array-contains', userId));
@@ -47,7 +45,6 @@ const fetchConversationsForUser = async (userId) => {
   });
   return fetchedConversations;
 };
-
 
 const createNewConversation = async (userId1, userId2) => {
   try {
@@ -66,4 +63,3 @@ const createNewConversation = async (userId1, userId2) => {
 };
 
 export { fetchMessages, sendMessage, fetchConversationsForUser, createNewConversation };
-

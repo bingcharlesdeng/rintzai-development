@@ -12,11 +12,13 @@ const NewChatModal = ({ onClose, onStartChat }) => {
       setSearchResults(results);
     } catch (error) {
       console.error('Error searching users:', error);
+      // Handle error (e.g., display error message to user)
     }
   };
 
   const handleSelectUser = (user) => {
     onStartChat(user);
+    onClose(); // Close the modal after selecting a user
   };
 
   return (

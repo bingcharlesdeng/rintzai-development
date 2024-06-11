@@ -1,11 +1,12 @@
 // ChatWindow.js
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase';
 import './chatWindow.css';
+import ChatMessage from './ChatMessage';
 
 const ChatWindow = ({ selectedConversation, loggedInUser }) => {
-  const [messages, setMessages] = React.useState([]);
+  const [messages, setMessages] = useState([]);
   const messageListRef = useRef(null);
 
   useEffect(() => {
@@ -41,17 +42,17 @@ const ChatWindow = ({ selectedConversation, loggedInUser }) => {
   return (
     <div className="chat-window">
       <div className="message-list" ref={messageListRef}>
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`message ${message.senderId === loggedInUser.id ? 'sent' : 'received'}`}
-          >
-            <div className="message-content">{message.content}</div>
-            <div className="message-timestamp">
-              {message.timestamp ? new Date(message.timestamp.toDate()).toLocaleString() : ''}
-            </div>
-          </div>
-        ))}
+        {messages.length > 0 ? (
+          messages.map((message) => (
+            <ChatMessage
+              key={message.id}
+              message={message}
+              loggedInUser={loggedInUser}
+            />
+          ))
+        ) : (
+          <div className="empty-chat-placeholder">No messages yet</div>
+        )}
       </div>
     </div>
   );

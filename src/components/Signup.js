@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { useUserContext } from './UserContext'; // Import useUserContext hook
 
 const Signup = () => {
-  const auth = getAuth();  // Get Firebase Auth instance
+  const auth = getAuth();
+  const { login } = useUserContext(); // Get login function from context
+  const navigate = useNavigate();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // useNavigate hook for redirection
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,36 +29,57 @@ const Signup = () => {
     }
 
     try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
-      console.log('User created:', result.user);
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(user, { displayName: name });
 
-      // Handle successful signup (e.g., clear form, redirect)
+      // Handle successful signup
       setName('');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-      setError(null); // Clear any previous errors
+      setError(null);
 
-      // Redirect to a different page after successful signup (replace with your desired route)
-      navigate('/login'); // Assuming redirect to home page
+      // Log in the user and redirect to home page
+      login({ uid: user.uid, displayName: user.displayName, email: user.email });
+      navigate('/home');
     } catch (error) {
       console.error(error);
-      setError(error.message || 'Signup failed. Please try again.'); // Set a user-friendly error message
+      setError(error.message || 'Signup failed. Please try again.');
     }
   };
 
   return (
-    <div>
+    <div className="signup-container">
       <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Name:</label>
-        <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} />
+        <input
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
         <label htmlFor="email">Email:</label>
-        <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
         <label htmlFor="password">Password:</label>
-        <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <label htmlFor="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+        <input
+          type="password"
+          id="confirmPassword"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
         <button type="submit">Sign Up</button>
         {error && <p className="error">{error}</p>}
       </form>

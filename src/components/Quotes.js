@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-const quotes = [ // Replace with API integration if needed
+const quotes = [
   { quote: 'The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart.', author: 'Helen Keller' },
-  { quote: 'Hold onto the dreams that make your heart smile.', author: "cd" },
+  { quote: 'Hold onto the dreams that make your heart smile.', author: 'Unknown' },
   // Add more quotes here
 ];
 
@@ -20,7 +20,7 @@ const DailyQuote = () => {
       <h2>Daily Inspiration</h2>
       {currentQuote && (
         <div>
-          <p>{currentQuote.quote}</p>
+          <p className="quote">{currentQuote.quote}</p>
           <p className="quote-author">- {currentQuote.author}</p>
         </div>
       )}

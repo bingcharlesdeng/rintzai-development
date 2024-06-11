@@ -1,23 +1,27 @@
 import React from 'react';
 
-const ConversationItem = ({ conversation, onSelectConversation }) => {
+const ConversationItem = ({ conversation, onSelectConversation, isSelected, getParticipantNames, loggedInUser }) => {
   const handleClick = () => onSelectConversation(conversation);
 
   // Extract conversation details
-  const { participantNames, avatarUrl, lastMessage, unreadCount } = conversation;
-
-  // Format participant names (optional)
-  const formattedParticipantNames = participantNames ? participantNames.join(', ') : 'Unnamed Conversation';
+  const { avatarUrl, lastMessage, unreadCount } = conversation;
+  const participantNames = getParticipantNames(conversation);
 
   return (
-    <li className="conversation-item" onClick={handleClick}>
-      <div className="conversation-participant">
-        {avatarUrl && <img src={avatarUrl} alt="Participant Avatar" />}
-        <span>{formattedParticipantNames}</span>
+    <li className={`conversation-item ${isSelected ? 'active' : ''}`} onClick={handleClick}>
+      <div className="conversation-avatar">
+        {avatarUrl ? (
+          <img src={avatarUrl} alt="Participant Avatar" />
+        ) : (
+          <div className="default-avatar">{participantNames.charAt(0).toUpperCase()}</div>
+        )}
       </div>
-      <div className="conversation-preview">
-        {lastMessage && <p>{lastMessage}</p>}
-        {unreadCount && <span className="unread-count">{unreadCount}</span>}
+      <div className="conversation-details">
+        <div className="conversation-name">{participantNames}</div>
+        <div className="conversation-last-message">{lastMessage}</div>
+      </div>
+      <div className="conversation-meta">
+        {unreadCount > 0 && <div className="unread-count">{unreadCount}</div>}
       </div>
     </li>
   );

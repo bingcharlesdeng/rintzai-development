@@ -1,19 +1,43 @@
-// ConversationList.js
 import React, { useState, useEffect } from 'react';
 import './conversationList.css';
 import Fuse from 'fuse.js';
 import { formatRelativeTime } from './utils';
+import { db, collection, getDocs, query, where } from '../../firebase';
 
 const ConversationList = ({ conversations, onSelectConversation, selectedConversation, loggedInUser }) => {
   const [filteredConversations, setFilteredConversations] = useState(conversations);
   const [searchTerm, setSearchTerm] = useState('');
+  const [participantNames, setParticipantNames] = useState({});
+
+  useEffect(() => {
+    const fetchParticipantNames = async () => {
+      const participantIds = conversations.reduce((ids, conversation) => [...ids, ...conversation.participants], []);
+      const uniqueParticipantIds = [...new Set(participantIds)];
+
+      const usersRef = collection(db, 'users');
+      const userDocs = await Promise.all(
+        uniqueParticipantIds.map((userId) => getDocs(query(usersRef, where('userId', '==', userId))))
+      );
+
+      const names = {};
+      userDocs.forEach((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          names[doc.data().userId] = doc.data().name;
+        });
+      });
+
+      setParticipantNames(names);
+    };
+
+    fetchParticipantNames();
+  }, [conversations]);
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
       setFilteredConversations(conversations);
     } else {
       const fuse = new Fuse(conversations, {
-        keys: ['participants'],
+        keys: ['participantNames'],
         threshold: 0.3,
       });
       const results = fuse.search(searchTerm);
@@ -21,13 +45,11 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
     }
   }, [searchTerm, conversations]);
 
-  const renderParticipantNames = (participantNames) => {
-    if (!participantNames || !Array.isArray(participantNames)) {
-      return 'No participants';
-    }
-
-    const otherParticipants = participantNames.filter(name => name !== loggedInUser.name);
-    return otherParticipants.join(', ');
+  const getParticipantNames = (conversation) => {
+    const names = conversation.participants
+      .map((participantId) => participantNames[participantId])
+      .filter((name) => name !== loggedInUser.name);
+    return names.join(' ');
   };
 
   return (
@@ -52,12 +74,12 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
                 <img src={conversation.avatarUrl} alt="Avatar" />
               ) : (
                 <div className="default-avatar">
-                  {renderParticipantNames(conversation.participants).charAt(0).toUpperCase()}
+                  {getParticipantNames(conversation).charAt(0).toUpperCase()}
                 </div>
               )}
             </div>
             <div className="conversation-details">
-              <div className="conversation-name">{renderParticipantNames(conversation.participants)}</div>
+              <div className="conversation-name">{getParticipantNames(conversation)}</div>
               <div className="conversation-last-message">
                 {conversation.lastMessage}
               </div>

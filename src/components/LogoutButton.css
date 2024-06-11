@@ -1,13 +1,16 @@
 .logout-button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 5px;
-    background-color: #aaa; /* Light gray background */
-    color: #fff; /* White text color */
-    cursor: pointer; /* Indicate clickable element */
-    transition: all 0.2s ease-in-out; /* Add hover effect */
-  
-    &:hover {
-      background-color: #888; /* Darker gray on hover */
-    }
-  }
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #aaa;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add subtle box shadow */
+  font-weight: 500; /* Slightly bolder font weight */
+}
+
+.logout-button:hover {
+  background-color: #888;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Deeper box shadow on hover */
+}

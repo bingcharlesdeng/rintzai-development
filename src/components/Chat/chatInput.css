@@ -4,6 +4,9 @@
   padding: 1rem;
   border-top: 1px solid #ddd;
   background-color: #fff;
+  position: sticky;
+  bottom: 0;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Add subtle box shadow */
 }
 
 .chat-input {
@@ -12,25 +15,28 @@
   border: 1px solid #ddd;
   border-radius: 25px;
   outline: none;
-  margin-right: 0.5rem; /* Add space between input and button */
-  font-size: 1rem; /* Make the input font size larger */
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
 }
 
 .chat-input:focus {
-  border-color: #0084ff; /* Accent color on focus */
+  border-color: #0084ff;
 }
 
 .chat-send-button {
-  background-color: #25D366; /* Green send button */
+  background-color: #25d366;
   color: white;
   padding: 0.8rem 1.2rem;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .chat-send-button:hover {
-  background-color: #20b955; /* Darker green on hover */
+  background-color: #20b955;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }

@@ -1,69 +1,85 @@
 /* userSearch.css */
 .user-search {
-    margin-bottom: 20px;
-  }
-  
-  .user-search form {
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-search input {
-    flex: 1;
-    padding: 8px;
-    font-size: 16px;
-  }
-  
-  .user-search button {
-    padding: 8px 16px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .search-results {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .search-results li {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .search-results li:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-    overflow: hidden;
-  }
-  
-  .user-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .default-avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ccc;
-    color: #fff;
-    font-size: 20px;
-    font-weight: bold;
-  }
-  
-  .user-name {
-    font-size: 16px;
-  }
+  margin-bottom: 20px;
+}
+
+.user-search form {
+  display: flex;
+  align-items: center;
+}
+
+.user-search input {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.user-search button {
+  padding: 8px 16px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.user-search button:hover {
+  background-color: #0056b3;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px; /* Set a maximum height for the search results */
+  overflow-y: auto; /* Add scrollbar if results exceed maximum height */
+}
+
+.search-results li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-results li:hover {
+  background-color: #f0f0f0;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle box shadow */
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.default-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ccc;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  width: 40px; /* Set a fixed width and height for consistency */
+  height: 40px;
+  border-radius: 50%;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 500; /* Slightly bolder font weight */
+}
