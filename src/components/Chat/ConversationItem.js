@@ -1,10 +1,12 @@
 import React from 'react';
+import { formatRelativeTime } from './utils';
+import './conversationItem.css';
 
 const ConversationItem = ({ conversation, onSelectConversation, isSelected, getParticipantNames, loggedInUser }) => {
   const handleClick = () => onSelectConversation(conversation);
 
   // Extract conversation details
-  const { avatarUrl, lastMessage, unreadCount } = conversation;
+  const { avatarUrl, lastMessage, unreadCount, lastMessageTimestamp } = conversation;
   const participantNames = getParticipantNames(conversation);
 
   return (
@@ -18,11 +20,12 @@ const ConversationItem = ({ conversation, onSelectConversation, isSelected, getP
       </div>
       <div className="conversation-details">
         <div className="conversation-name">{participantNames}</div>
-        <div className="conversation-last-message">{lastMessage}</div>
+        <div className="conversation-last-message">
+          <span className="last-message-text">{lastMessage}</span>
+          <span className="last-message-timestamp">{formatRelativeTime(lastMessageTimestamp)}</span>
+        </div>
       </div>
-      <div className="conversation-meta">
-        {unreadCount > 0 && <div className="unread-count">{unreadCount}</div>}
-      </div>
+      {unreadCount > 0 && <div className="unread-count">{unreadCount}</div>}
     </li>
   );
 };

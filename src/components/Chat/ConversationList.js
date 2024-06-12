@@ -3,6 +3,7 @@ import './conversationList.css';
 import Fuse from 'fuse.js';
 import { formatRelativeTime } from './utils';
 import { db, collection, getDocs, query, where } from '../../firebase';
+import ConversationItem from './ConversationItem';
 
 const ConversationList = ({ conversations, onSelectConversation, selectedConversation, loggedInUser }) => {
   const [filteredConversations, setFilteredConversations] = useState(conversations);
@@ -33,14 +34,16 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
   }, [conversations]);
 
   useEffect(() => {
+    console.log('Conversations changed:', conversations);
     if (searchTerm.trim() === '') {
       setFilteredConversations(conversations);
     } else {
       const fuse = new Fuse(conversations, {
-        keys: ['participantNames'],
-        threshold: 0.3,
+        keys: ['lastMessage'],
+        threshold: 0.1,
       });
       const results = fuse.search(searchTerm);
+      console.log('Fuse search results:', results);
       setFilteredConversations(results.map(result => result.item));
     }
   }, [searchTerm, conversations]);
@@ -49,7 +52,7 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
     const names = conversation.participants
       .map((participantId) => participantNames[participantId])
       .filter((name) => name !== loggedInUser.name);
-    return names.join(' ');
+    return names.join(', ');
   };
 
   return (
@@ -64,35 +67,14 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
       </div>
       <ul className="conversation-list">
         {filteredConversations.map((conversation) => (
-          <li
+          <ConversationItem
             key={conversation.id}
-            onClick={() => onSelectConversation(conversation)}
-            className={`conversation-item ${selectedConversation?.id === conversation.id ? 'active' : ''}`}
-          >
-            <div className="conversation-avatar">
-              {conversation.avatarUrl ? (
-                <img src={conversation.avatarUrl} alt="Avatar" />
-              ) : (
-                <div className="default-avatar">
-                  {getParticipantNames(conversation).charAt(0).toUpperCase()}
-                </div>
-              )}
-            </div>
-            <div className="conversation-details">
-              <div className="conversation-name">{getParticipantNames(conversation)}</div>
-              <div className="conversation-last-message">
-                {conversation.lastMessage}
-              </div>
-            </div>
-            <div className="conversation-meta">
-              <div className="conversation-timestamp">
-                {conversation.lastMessageTimestamp ? formatRelativeTime(conversation.lastMessageTimestamp) : ''}
-              </div>
-              {conversation.unreadCount > 0 && (
-                <div className="unread-count">{conversation.unreadCount}</div>
-              )}
-            </div>
-          </li>
+            conversation={conversation}
+            onSelectConversation={onSelectConversation}
+            isSelected={selectedConversation?.id === conversation.id}
+            getParticipantNames={getParticipantNames}
+            loggedInUser={loggedInUser}
+          />
         ))}
       </ul>
     </div>

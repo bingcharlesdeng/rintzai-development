@@ -6,13 +6,20 @@ const UserContext = createContext(null);
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const auth = getAuth();
 
   // Listen for auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setIsLoggedIn(!!currentUser);
+      if (currentUser) {
+        setUser(currentUser);
+        setIsLoggedIn(true);
+      } else {
+        setUser(null);
+        setIsLoggedIn(false);
+      }
+      setIsLoading(false);
     });
 
     return () => unsubscribe();
@@ -21,7 +28,6 @@ export const UserProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     setIsLoggedIn(true);
-    localStorage.setItem('isLoggedIn', true);
   };
 
   const logout = async () => {
@@ -29,13 +35,12 @@ export const UserProvider = ({ children }) => {
       await auth.signOut();
       setUser(null);
       setIsLoggedIn(false);
-      localStorage.removeItem('isLoggedIn');
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
 
-  const value = { user, isLoggedIn, login, logout };
+  const value = { user, isLoggedIn, login, logout, isLoading };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

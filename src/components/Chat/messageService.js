@@ -1,5 +1,6 @@
-import { db, collection, getDocs, query, where, addDoc, serverTimestamp, orderBy, doc, updateDoc } from '../../firebase';
+import { db, collection, getDocs, query, where, addDoc, serverTimestamp, orderBy, doc, updateDoc, arrayUnion } from '../../firebase';
 
+// Fetch messages for a conversation
 const fetchMessages = async (conversationId) => {
   const messagesRef = collection(db, 'messages');
   const q = query(messagesRef, where('conversationId', '==', conversationId), orderBy('timestamp', 'asc'));
@@ -11,6 +12,7 @@ const fetchMessages = async (conversationId) => {
   return fetchedMessages;
 };
 
+// Send a new message
 const sendMessage = async (message, conversationId, senderId) => {
   try {
     const messagesRef = collection(db, 'messages');
@@ -20,10 +22,12 @@ const sendMessage = async (message, conversationId, senderId) => {
       content: message,
       timestamp: serverTimestamp(),
     };
-    await addDoc(messagesRef, newMessage);
+    const docRef = await addDoc(messagesRef, newMessage);
+    const messageId = docRef.id;
 
     const conversationRef = doc(db, 'conversations', conversationId);
     await updateDoc(conversationRef, {
+      messageIds: arrayUnion(messageId),
       lastMessage: message,
       lastMessageTimestamp: serverTimestamp(),
     });

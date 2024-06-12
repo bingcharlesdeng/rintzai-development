@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
-import { useUserContext } from './UserContext'; // Import useUserContext hook
+import { useUserContext } from './UserContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { login } = useUserContext(); // Get login function from context
+  const { login } = useUserContext();
 
   const auth = getAuth();
 
@@ -19,7 +19,6 @@ const Login = () => {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
 
-      // Handle successful login
       login({ uid: user.uid, displayName: user.displayName, email: user.email });
       navigate('/home');
     } catch (error) {
@@ -36,7 +35,6 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Handle successful login
       login({ uid: user.uid, displayName: user.displayName, email: user.email });
       navigate('/home');
     } catch (error) {
@@ -49,35 +47,35 @@ const Login = () => {
     <div className="login-container">
       <h1>Mental Wellness App</h1>
       <button onClick={handleGoogleSignIn} className="login-button animate__animated animate__bounce">
-      Sign in with Google
-</button>
-<form onSubmit={handleEmailLogin}>
-  <label htmlFor="email">Email:</label>
-  <input
-    type="email"
-    id="email"
-    value={email}
-    onChange={(e) => setEmail(e.target.value)}
-    required
-  />
-  <label htmlFor="password">Password:</label>
-  <input
-    type="password"
-    id="password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    required
-  />
-  <button type="submit" className="login-button animate__animated animate__bounce">
-    Login with Email/Password
-  </button>
-</form>
-{error && <p className="error-message">{error}</p>}
-<p>
-  Don't have an account? <Link to="/signup">Register</Link>
-</p>
-</div>
-);
+        Sign in with Google
+      </button>
+      <form onSubmit={handleEmailLogin}>
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit" className="login-button animate__animated animate__bounce">
+          Login with Email/Password
+        </button>
+      </form>
+      {error && <p className="error-message">{error}</p>}
+      <p>
+        Don't have an account? <Link to="/signup">Register</Link>
+      </p>
+    </div>
+  );
 };
 
 export default Login;

@@ -3,8 +3,9 @@ export const formatRelativeTime = (timestamp) => {
     return ''; // Return an empty string if timestamp is null or undefined
   }
 
+  const date = timestamp.toDate(); // Convert Timestamp to Date
   const now = new Date();
-  const diff = now - timestamp.toDate();
+  const diff = now - date;
 
   const minute = 60 * 1000;
   const hour = 60 * minute;
@@ -20,6 +21,6 @@ export const formatRelativeTime = (timestamp) => {
     return `${hours} hour${hours > 1 ? 's' : ''} ago`;
   } else {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return timestamp.toDate().toLocaleDateString(undefined, options);
+    return date.toLocaleDateString(undefined, options);
   }
 };

@@ -9,11 +9,13 @@ import { sendMessage, fetchConversationsForUser, createNewConversation } from '.
 import { db, collection, onSnapshot, query, where } from '../../firebase';
 import './chat.css';
 import UserContext from '../UserContext';
+import ConversationSearch from './ConversationSearch';
 
 const Chat = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [conversations, setConversations] = useState([]);
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
+  const [searchedConversations, setSearchedConversations] = useState([]);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -27,6 +29,7 @@ const Chat = () => {
             ...doc.data(),
           }));
           setConversations(updatedConversations);
+          setSearchedConversations(updatedConversations); // Set searchedConversations to initialConversations
         });
 
         return () => {
@@ -37,6 +40,19 @@ const Chat = () => {
 
     fetchUserConversations();
   }, [user]);
+
+  const handleSearchResults = (conversationIds) => {
+    console.log('Received conversation IDs:', conversationIds);
+    if (conversationIds.length === 0) {
+      setSearchedConversations(conversations);
+    } else {
+      const searchedConversations = conversations.filter((conversation) =>
+        conversationIds.includes(conversation.id)
+      );
+      console.log('Searched conversations:', searchedConversations);
+      setSearchedConversations(searchedConversations);
+    }
+  };
 
   const handleNewChat = () => {
     setIsNewChatModalOpen(true);
@@ -103,7 +119,7 @@ const Chat = () => {
         )}
         <UserSearch onSelectUser={handleSelectUser} />
         <ConversationList
-          conversations={conversations}
+          conversations={searchedConversations}
           onSelectConversation={handleSelectConversation}
           selectedConversation={selectedConversation}
           loggedInUser={user}

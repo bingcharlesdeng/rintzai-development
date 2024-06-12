@@ -1,7 +1,6 @@
 // ChatWindow.js
 import React, { useEffect, useRef, useState } from 'react';
-import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { db, collection, onSnapshot, query, where, orderBy } from '../../firebase';
 import './chatWindow.css';
 import ChatMessage from './ChatMessage';
 
@@ -10,27 +9,31 @@ const ChatWindow = ({ selectedConversation, loggedInUser }) => {
   const messageListRef = useRef(null);
 
   useEffect(() => {
-    if (selectedConversation) {
-      const messagesQuery = query(
-        collection(db, 'messages'),
-        where('conversationId', '==', selectedConversation.id),
-        orderBy('timestamp', 'asc')
-      );
+    const fetchConversationMessages = async () => {
+      if (selectedConversation) {
+        const messagesRef = collection(db, 'messages');
+        const q = query(
+          messagesRef,
+          where('conversationId', '==', selectedConversation.id),
+          orderBy('timestamp', 'asc')
+        );
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          const fetchedMessages = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setMessages(fetchedMessages);
+        });
 
-      const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-        const fetchedMessages = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setMessages(fetchedMessages);
-      });
+        return () => {
+          unsubscribe();
+        };
+      } else {
+        setMessages([]);
+      }
+    };
 
-      return () => {
-        unsubscribe();
-      };
-    } else {
-      setMessages([]);
-    }
+    fetchConversationMessages();
   }, [selectedConversation]);
 
   useEffect(() => {
