@@ -1,9 +1,8 @@
-import { signOut } from 'firebase/auth'; // Replace with your authentication library's logout function
+import { signOut } from 'firebase/auth';
 
-export const handleLogout = async (auth) => {  // Pass 'auth' as a parameter
+export const handleLogout = async (auth) => {
   try {
-    await signOut(auth); // Use the provided 'auth' instance
-
+    await signOut(auth);
     console.log('Logged out successfully!');
 
     // Optionally redirect to login page (assuming no react-router-dom)

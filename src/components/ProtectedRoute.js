@@ -1,15 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import  UserContext from './UserContext'; // Import the user context
+import { useUserContext } from './UserContext';
 
-const ProtectedRoute = ({ children }) => {
-  const { isLoggedIn } = useContext(UserContext);
+const ProtectedRoute = () => {
+  const { isLoggedIn, isLoading } = useUserContext();
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace />; // Redirect to login on unauthorized access
+  if (isLoading) {
+    return;
   }
 
-  return children || <Outlet />; // Render wrapped component or Outlet for nested routes
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

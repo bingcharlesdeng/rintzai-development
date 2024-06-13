@@ -1,24 +1,22 @@
 .feature-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center; /* Center buttons horizontally */
-  }
-  
-  .feature-buttons a {
-    padding: 0.75rem 1rem;
-    border-radius: 5px;
-    background-color: #f0f0f0; /* Light gray background */
-    color: #333; /* Text color */
-    text-decoration: none; /* Remove underline */
-    transition: all 0.2s ease-in-out; /* Add hover effect */
-  }
-  
-  .feature-buttons a:hover {
-    background-color: #ddd; /* Slightly darker background on hover */
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
 
-  
-  
-  
+.feature-buttons a {
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+}
+
+.feature-buttons a:hover {
+  background-color: #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

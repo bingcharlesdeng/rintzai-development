@@ -1,68 +1,93 @@
 /* General styles */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh; /* Set minimum viewport height */
-    background: linear-gradient(to right, #f2f2f2, #ddd); /* Simple linear gradient background */
-  }
-  
+  font-family: 'Roboto', sans-serif; /* Use a more modern font */
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(to right, #f8f8f8, #e8e8e8); /* Softer gradient */
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  gap: 1.5rem;
+  max-width: 1200px; /* Increase maximum width for larger screens */
+  margin: 0 auto;
+}
+
+.section {
+  width: 100%;
+  margin-bottom: 2rem; /* Increase margin for better spacing */
+}
+
+/* Improved heading styles */
+h1 {
+  font-size: 2rem; /* Larger heading size */
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333; /* Slightly darker text color */
+}
+
+/* Improved paragraph styles */
+p {
+  font-size: 1.1rem; /* Slightly larger font size */
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #555; /* Slightly darker text color */
+}
+
+/* Feature section styles */
+.feature-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.feature-section a {
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle box shadow */
+  font-weight: 500; /* Slightly bolder font weight */
+}
+
+.feature-section a:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Deeper box shadow on hover */
+}
+
+/* Quote section styles */
+.quote-section {
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #f8f8f8; /* Slightly lighter background */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle box shadow */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
   .home-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    gap: 1.5rem;
-    max-width: 800px; /* Set a maximum width for responsiveness */
-    margin: 0 auto; /* Center the container horizontally */
+    padding: 1rem;
   }
-  
-  .section {
-    width: 100%; /* Make sections full width */
-    margin-bottom: 1.5rem; /* Add some margin between sections */
-  }
-  
-  /* Improved heading styles (optional) */
+
   h1 {
-    font-size: 1.8rem; /* Increase heading size slightly */
-    margin-bottom: 1rem; /* Add more space after heading */
-    text-align: center; /* Center headings by default */
+    font-size: 1.6rem;
   }
-  
-  /* Improved paragraph styles (optional) */
+
   p {
     font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 1rem; /* Add some space after paragraphs */
   }
-  
-  /* (Optional) Add styles for specific sections */
-  .feature-section {
-    display: flex; /* Arrange features horizontally */
-    flex-wrap: wrap; /* Allow features to wrap on smaller screens */
-    justify-content: space-around; /* Distribute features evenly */
-  }
-  
+
   .feature-section a {
-    /* Styles for feature buttons (consider moving these to a separate CSS file) */
-    padding: 1rem 1.5rem; /* Adjust button padding for better readability */
-    border-radius: 5px;
-    background-color: #f0f0f0; /* Light gray background */
-    color: #333; /* Text color */
-    text-decoration: none; /* Remove underline */
-    transition: all 0.2s ease-in-out; /* Add hover effect */
-    font-weight: bold; /* Make buttons stand out */
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
   }
-  
-  .feature-section a:hover {
-    background-color: #ddd; /* Slightly darker background on hover */
-  }
-  
-  .quote-section {
-    /* Styles for the quote section */
-    border: 1px solid #ddd; /* Add a subtle border */
-    padding: 1rem;
-    border-radius: 5px;
-    text-align: justify; /* Align quote text for better readability */
-  }
-  
+}

@@ -1,52 +1,67 @@
 .chat-window {
-    height: calc(100vh - 8rem); /* Adjust for headers and padding */
-    padding: 0.5rem;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    overflow-y: auto;
-  }
-  
-  .message-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .message {
-    padding: 0.75rem 1rem;
-    border-radius: 4px;
-    margin-bottom: 0.5rem;
-    display: flex; /* Allow for sender/content alignment */
-  }
-  
-  .message.sent {
-    background-color: #ddd;
-    align-self: flex-end;
-  }
-  
-  .message.received {
-    background-color: #eee;
-    align-self: flex-start;
-  }
-  
-  .message-sender {
-    font-weight: bold;
-    margin-right: 0.5rem;
-  }
-  
-  .message-content {
-    flex: 1; /* Allow message content to fill available space */
-  }
-  
-  .message-timestamp {
-    font-size: 0.8rem;
-    color: #999;
-    margin-top: 0.25rem;
-  }
-  
-  .empty-chat-placeholder {
-    text-align: center;
-    color: #aaa;
-    font-style: italic;
-  }
-  
+  height: calc(100vh - 180px); /* Adjust the height to leave space for the input area */
+  padding: 0.5rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.message {
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  max-width: 60%;
+  word-wrap: break-word;
+}
+
+.message.sent {
+  background-color: #ddd;
+  align-self: flex-end;
+  border-bottom-right-radius: 0;
+}
+
+.message.received {
+  background-color: #eee;
+  align-self: flex-start;
+  border-bottom-left-radius: 0;
+}
+
+.message-sender {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.message-content {
+  flex: 1;
+}
+
+.message-timestamp {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 0.25rem;
+}
+
+.empty-chat-placeholder {
+  text-align: center;
+  color: #aaa;
+  font-style: italic;
+}
+.chat-window {
+  height: calc(100vh - 200px);
+  overflow-y: auto;
+}

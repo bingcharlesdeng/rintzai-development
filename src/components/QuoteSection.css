@@ -1,16 +1,17 @@
-.quote-container {
-    margin-bottom: 1rem;
-  }
-  
-  .quote {
-    font-style: italic;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    text-align: center; /* Center the quote text */
-  }
-  
-  .quote-author {
-    font-size: 0.8rem;
-    color: #aaa; /* Lighter gray for author text */
-    text-align: center; /* Center the author name */
-  }
+.quote-section {
+  margin-bottom: 1rem;
+}
+
+.quote {
+  font-style: italic;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.quote-author {
+  font-size: 0.8rem;
+  color: #aaa;
+  text-align: center;
+}

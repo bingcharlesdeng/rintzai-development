@@ -1,14 +1,16 @@
 import React from 'react';
+import { formatRelativeTime } from './utils';
 
-const ChatMessage = ({ message }) => {
-  // Extract message content, sender, timestamp (replace with your data structure)
-  const { content, sender, timestamp } = message;
+const ChatMessage = ({ message, loggedInUser }) => {
+  const { content, senderId, timestamp } = message;
+  const isSentByLoggedInUser = senderId === loggedInUser.uid;
 
   return (
-    <div className="chat-message">
-      <p>{content}</p>
-      {/* Optionally display sender and timestamp */}
-      {/* <p>Sent by: {sender} at {timestamp}</p> */}
+    <div className={`message ${isSentByLoggedInUser ? 'sent' : 'received'}`}>
+      <div className="message-content">{content}</div>
+      <div className="message-timestamp">
+        {timestamp ? formatRelativeTime(timestamp) : ''}
+      </div>
     </div>
   );
 };
