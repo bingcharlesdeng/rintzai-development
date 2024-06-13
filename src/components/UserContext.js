@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { createUserInDB } from './userService'; // Import the createUserInDB function
 
 const UserContext = createContext(null);
 
@@ -11,8 +12,9 @@ export const UserProvider = ({ children }) => {
 
   // Listen for auth state changes
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
+        await createUserInDB(currentUser); // Create a new user in the database if they don't exist
         setUser(currentUser);
         setIsLoggedIn(true);
       } else {

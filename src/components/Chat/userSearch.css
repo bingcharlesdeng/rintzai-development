@@ -2,6 +2,10 @@
 .user-search {
   margin-bottom: 20px;
 }
+.user-list-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
 
 .user-search form {
   display: flex;

@@ -14,5 +14,4 @@ const fetchConversations = async (userId) => {
   }));
   return conversations;
 };
-
 export { fetchConversations };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './conversationList.css';
 import Fuse from 'fuse.js';
 import { formatRelativeTime } from './utils';
-import { db, collection, getDocs, query, where } from '../../firebase';
+import { db, collection, getDocs, query, where, orderBy } from '../../firebase';
 import ConversationItem from './ConversationItem';
 
 const ConversationList = ({ conversations, onSelectConversation, selectedConversation, loggedInUser }) => {
@@ -34,7 +34,6 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
   }, [conversations]);
 
   useEffect(() => {
-    console.log('Conversations changed:', conversations);
     if (searchTerm.trim() === '') {
       setFilteredConversations(conversations);
     } else {
@@ -43,7 +42,6 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
         threshold: 0.1,
       });
       const results = fuse.search(searchTerm);
-      console.log('Fuse search results:', results);
       setFilteredConversations(results.map(result => result.item));
     }
   }, [searchTerm, conversations]);
@@ -52,6 +50,8 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
     const names = conversation.participants
       .map((participantId) => participantNames[participantId])
       .filter((name) => name !== loggedInUser.name);
+    console.log(names, "names");
+    console.log(participantNames, "participant object");
     return names.join(', ');
   };
 
@@ -65,18 +65,20 @@ const ConversationList = ({ conversations, onSelectConversation, selectedConvers
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <ul className="conversation-list">
-        {filteredConversations.map((conversation) => (
-          <ConversationItem
-            key={conversation.id}
-            conversation={conversation}
-            onSelectConversation={onSelectConversation}
-            isSelected={selectedConversation?.id === conversation.id}
-            getParticipantNames={getParticipantNames}
-            loggedInUser={loggedInUser}
-          />
-        ))}
-      </ul>
+      <div className="conversation-list-wrapper">
+        <ul className="conversation-list">
+          {filteredConversations.map((conversation) => (
+            <ConversationItem
+              key={conversation.id}
+              conversation={conversation}
+              onSelectConversation={onSelectConversation}
+              isSelected={selectedConversation?.id === conversation.id}
+              getParticipantNames={getParticipantNames}
+              loggedInUser={loggedInUser}
+            />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

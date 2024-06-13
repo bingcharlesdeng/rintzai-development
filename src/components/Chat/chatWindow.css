@@ -61,3 +61,7 @@
   color: #aaa;
   font-style: italic;
 }
+.chat-window {
+  height: calc(100vh - 200px);
+  overflow-y: auto;
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { searchUsers } from './userService';
+import { searchUsers } from './userChatService';
 import './newChatModal.css';
 
 const NewChatModal = ({ onClose, onStartChat }) => {

@@ -1,6 +1,5 @@
-// UserSearch.js
 import React, { useState } from 'react';
-import { searchUsers } from './userService';
+import { searchUsers } from './userChatService';
 import './userSearch.css';
 
 const UserSearch = ({ onSelectUser }) => {
@@ -12,6 +11,7 @@ const UserSearch = ({ onSelectUser }) => {
     try {
       const results = await searchUsers(searchTerm);
       setSearchResults(results);
+      console.log('Search results:', results);
     } catch (error) {
       console.error('Error searching users:', error);
       // Handle error (e.g., display error message to user)
@@ -29,20 +29,22 @@ const UserSearch = ({ onSelectUser }) => {
         />
         <button type="submit">Search</button>
       </form>
-      <ul className="search-results">
-        {searchResults.map((user) => (
-          <li key={user.id} onClick={() => onSelectUser(user)}>
-            <div className="user-avatar">
-              {user.avatarUrl ? (
-                <img src={user.avatarUrl} alt="User Avatar" />
-              ) : (
-                <div className="default-avatar">{user.name.charAt(0).toUpperCase()}</div>
-              )}
-            </div>
-            <div className="user-name">{user.name}</div>
-          </li>
-        ))}
-      </ul>
+      <div className="user-list-container">
+        <ul className="search-results">
+          {searchResults.map((user) => (
+            <li key={user.id} onClick={() => onSelectUser(user)}>
+              <div className="user-avatar">
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="User Avatar" />
+                ) : (
+                  <div className="default-avatar">{user.name.charAt(0).toUpperCase()}</div>
+                )}
+              </div>
+              <div className="user-name">{user.name}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

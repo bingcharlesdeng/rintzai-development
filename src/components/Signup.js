@@ -43,8 +43,9 @@ const Signup = () => {
       login({ uid: user.uid, displayName: user.displayName, email: user.email });
       navigate('/home');
     } catch (error) {
-      console.error(error);
+      console.error("error is logged when trying to login to home",error);
       setError(error.message || 'Signup failed. Please try again.');
+  
     }
   };
 

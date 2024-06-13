@@ -1,4 +1,3 @@
-// Chat.js
 import React, { useState, useEffect, useContext } from 'react';
 import ChatWindow from './ChatWindow';
 import ConversationList from './ConversationList';
@@ -6,7 +5,7 @@ import ChatInput from './ChatInput';
 import UserSearch from './UserSearch';
 import NewChatModal from './NewChatModal';
 import { sendMessage, fetchConversationsForUser, createNewConversation } from './messageService';
-import { db, collection, onSnapshot, query, where } from '../../firebase';
+import { db, collection, onSnapshot, query, where, orderBy } from '../../firebase';
 import './chat.css';
 import UserContext from '../UserContext';
 import ConversationSearch from './ConversationSearch';
@@ -17,40 +16,44 @@ const Chat = () => {
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
   const [searchedConversations, setSearchedConversations] = useState([]);
   const { user } = useContext(UserContext);
-
+  
   useEffect(() => {
     const fetchUserConversations = async () => {
       if (user) {
         const conversationsRef = collection(db, 'conversations');
-        const q = query(conversationsRef, where('participants', 'array-contains', user.uid));
+        const q = query(
+          conversationsRef,
+          where('participants', 'array-contains', user.uid),
+          orderBy('lastMessageTimestamp', 'desc')
+        );
         const unsubscribe = onSnapshot(q, (snapshot) => {
           const updatedConversations = snapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
           }));
           setConversations(updatedConversations);
-          setSearchedConversations(updatedConversations); // Set searchedConversations to initialConversations
+          setSearchedConversations(updatedConversations);
+          console.log('Fetched user conversations:', updatedConversations);
         });
-
+  
         return () => {
           unsubscribe();
         };
       }
     };
-
+  
     fetchUserConversations();
   }, [user]);
 
   const handleSearchResults = (conversationIds) => {
-    console.log('Received conversation IDs:', conversationIds);
     if (conversationIds.length === 0) {
       setSearchedConversations(conversations);
     } else {
       const searchedConversations = conversations.filter((conversation) =>
         conversationIds.includes(conversation.id)
       );
-      console.log('Searched conversations:', searchedConversations);
       setSearchedConversations(searchedConversations);
+      console.log('Searched conversations:', searchedConversations);
     }
   };
 
@@ -67,6 +70,7 @@ const Chat = () => {
       const newConversation = await createNewConversation(user.uid, selectedUser.id);
       setSelectedConversation(newConversation);
       handleCloseNewChatModal();
+      console.log('Started new conversation:', newConversation);
     } catch (error) {
       console.error('Error creating new conversation:', error);
       // Handle error (e.g., display error message to user)
@@ -75,18 +79,22 @@ const Chat = () => {
 
   const handleSelectConversation = (conversation) => {
     setSelectedConversation(conversation);
+    console.log('Selected conversation:', conversation);
   };
 
   const handleSendMessage = (message) => {
     if (selectedConversation) {
-      sendMessage(message, selectedConversation.id, user.uid)
+      const currentTimestamp = new Date();
+      sendMessage(message, selectedConversation.id, user.uid, currentTimestamp)
+        .then(() => {
+          console.log('Message sent:', message);
+        })
         .catch((error) => {
           console.error('Error sending message:', error);
           // Handle error (e.g., display error message to user)
         });
     }
   };
-
   const handleSelectUser = async (user) => {
     const existingConversation = conversations.find((conversation) =>
       conversation.participants.includes(user.id) && conversation.participants.includes(user.uid)
@@ -94,10 +102,12 @@ const Chat = () => {
 
     if (existingConversation) {
       setSelectedConversation(existingConversation);
+      console.log('Selected existing conversation:', existingConversation);
     } else {
       try {
         const newConversation = await createNewConversation(user.id, user.uid);
         setSelectedConversation(newConversation);
+        console.log('Created new conversation:', newConversation);
       } catch (error) {
         console.error('Error creating new conversation:', error);
         // Handle error (e.g., display error message to user)
@@ -117,7 +127,6 @@ const Chat = () => {
         {isNewChatModalOpen && (
           <NewChatModal onClose={handleCloseNewChatModal} onStartChat={handleStartChat} />
         )}
-        <UserSearch onSelectUser={handleSelectUser} />
         <ConversationList
           conversations={searchedConversations}
           onSelectConversation={handleSelectConversation}

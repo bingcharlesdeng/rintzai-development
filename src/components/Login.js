@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
 import { useUserContext } from './UserContext';
+import { createUserInDB } from './userService'; // Import the createUserInDB function
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -19,6 +20,7 @@ const Login = () => {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
 
+      await createUserInDB(user); // Create a new user in the database if they don't exist
       login({ uid: user.uid, displayName: user.displayName, email: user.email });
       navigate('/home');
     } catch (error) {
@@ -35,6 +37,7 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
+      await createUserInDB(user); // Create a new user in the database if they don't exist
       login({ uid: user.uid, displayName: user.displayName, email: user.email });
       navigate('/home');
     } catch (error) {

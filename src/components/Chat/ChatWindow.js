@@ -1,4 +1,3 @@
-// ChatWindow.js
 import React, { useEffect, useRef, useState } from 'react';
 import { db, collection, onSnapshot, query, where, orderBy } from '../../firebase';
 import './chatWindow.css';
@@ -6,7 +5,7 @@ import ChatMessage from './ChatMessage';
 
 const ChatWindow = ({ selectedConversation, loggedInUser }) => {
   const [messages, setMessages] = useState([]);
-  const messageListRef = useRef(null);
+  const chatWindowRef = useRef(null);
 
   useEffect(() => {
     const fetchConversationMessages = async () => {
@@ -23,6 +22,7 @@ const ChatWindow = ({ selectedConversation, loggedInUser }) => {
             ...doc.data(),
           }));
           setMessages(fetchedMessages);
+          console.log('Fetched messages:', fetchedMessages);
         });
 
         return () => {
@@ -37,14 +37,14 @@ const ChatWindow = ({ selectedConversation, loggedInUser }) => {
   }, [selectedConversation]);
 
   useEffect(() => {
-    if (messageListRef.current) {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
     }
   }, [messages]);
 
   return (
-    <div className="chat-window">
-      <div className="message-list" ref={messageListRef}>
+    <div className="chat-window" ref={chatWindowRef}>
+      <div className="message-list">
         {messages.length > 0 ? (
           messages.map((message) => (
             <ChatMessage

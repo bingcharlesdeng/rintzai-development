@@ -13,14 +13,14 @@ const fetchMessages = async (conversationId) => {
 };
 
 // Send a new message
-const sendMessage = async (message, conversationId, senderId) => {
+const sendMessage = async (message, conversationId, senderId, timestamp) => {
   try {
     const messagesRef = collection(db, 'messages');
     const newMessage = {
       conversationId,
       senderId,
       content: message,
-      timestamp: serverTimestamp(),
+      timestamp: timestamp,
     };
     const docRef = await addDoc(messagesRef, newMessage);
     const messageId = docRef.id;
@@ -29,7 +29,7 @@ const sendMessage = async (message, conversationId, senderId) => {
     await updateDoc(conversationRef, {
       messageIds: arrayUnion(messageId),
       lastMessage: message,
-      lastMessageTimestamp: serverTimestamp(),
+      lastMessageTimestamp: timestamp,
     });
 
     console.log('Message sent!');
