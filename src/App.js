@@ -6,7 +6,7 @@ import { getAuth } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
 import { getFirestore } from 'firebase/firestore';
 import Home from './components/Home';
-import Journal from './components/Journal';
+import Journal from './components/Journal/Journal';
 import MoodTracker from './components/MoodTracker';
 import Chat from './components/Chat/Chat';
 import DailyQuote from './components/Quotes';

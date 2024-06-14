@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { useUserContext } from './UserContext'; // Import useUserContext hook
+import { useUserContext } from './UserContext';
+import './signup.css';
 
 const Signup = () => {
   const auth = getAuth();
-  const { login } = useUserContext(); // Get login function from context
+  const { login } = useUserContext();
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
@@ -17,7 +18,6 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic form validation
     if (!name || !email || !password || !confirmPassword) {
       setError('Please fill in all fields');
       return;
@@ -32,60 +32,72 @@ const Signup = () => {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(user, { displayName: name });
 
-      // Handle successful signup
       setName('');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
       setError(null);
 
-      // Log in the user and redirect to home page
       login({ uid: user.uid, displayName: user.displayName, email: user.email });
       navigate('/home');
     } catch (error) {
-      console.error("error is logged when trying to login to home",error);
+      console.error("error is logged when trying to login to home", error);
       setError(error.message || 'Signup failed. Please try again.');
-  
     }
   };
 
   return (
     <div className="signup-container">
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <label htmlFor="confirmPassword">Confirm Password:</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <button type="submit">Sign Up</button>
-        {error && <p className="error">{error}</p>}
-      </form>
+    <div className="signup-card">
+    <img src="logo.png" alt="Logo" className="logo" />
+    <h2 className="signup-title">Sign Up</h2>
+    <form onSubmit={handleSubmit} className="signup-form">
+    <div className="form-group">
+    <label htmlFor="name" className="form-label">Name:</label>
+    <input
+    type="text"
+    id="name"
+    value={name}
+    onChange={(e) => setName(e.target.value)}
+    className="form-input"
+    />
     </div>
-  );
-};
-
-export default Signup;
+    <div className="form-group">
+    <label htmlFor="email" className="form-label">Email:</label>
+    <input
+    type="email"
+    id="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    className="form-input"
+    />
+    </div>
+    <div className="form-group">
+    <label htmlFor="password" className="form-label">Password:</label>
+    <input
+    type="password"
+    id="password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    className="form-input"
+    />
+    </div>
+    <div className="form-group">
+    <label htmlFor="confirmPassword" className="form-label">Confirm Password:</label>
+    <input
+    type="password"
+    id="confirmPassword"
+    value={confirmPassword}
+    onChange={(e) => setConfirmPassword(e.target.value)}
+    className="form-input"
+    />
+    </div>
+    <button type="submit" className="signup-button">Sign Up</button>
+    {error && <p className="error">{error}</p>}
+    </form>
+    </div>
+    </div>
+    );
+    };
+    export default Signup;
+    
