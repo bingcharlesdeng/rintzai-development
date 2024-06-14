@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
 import { useUserContext } from './UserContext';
-import { createUserInDB } from './userService'; // Import the createUserInDB function
+import { createUserInDB } from './userService';
+import './login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ const Login = () => {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
 
-      await createUserInDB(user); // Create a new user in the database if they don't exist
+      await createUserInDB(user);
       login({ uid: user.uid, displayName: user.displayName, email: user.email });
       navigate('/home');
     } catch (error) {
@@ -37,7 +38,7 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      await createUserInDB(user); // Create a new user in the database if they don't exist
+      await createUserInDB(user);
       login({ uid: user.uid, displayName: user.displayName, email: user.email });
       navigate('/home');
     } catch (error) {
@@ -48,35 +49,47 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h1>Mental Wellness App</h1>
-      <button onClick={handleGoogleSignIn} className="login-button animate__animated animate__bounce">
-        Sign in with Google
-      </button>
-      <form onSubmit={handleEmailLogin}>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" className="login-button animate__animated animate__bounce">
-          Login with Email/Password
+      <div className="login-card">
+        <h1 className="login-title">Mental Wellness App</h1>
+        <button onClick={handleGoogleSignIn} className="login-button">
+          Sign in with Google
         </button>
-      </form>
-      {error && <p className="error-message">{error}</p>}
-      <p>
-        Don't have an account? <Link to="/signup">Register</Link>
-      </p>
+        <form onSubmit={handleEmailLogin} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">
+              Email:
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="form-input"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">
+              Password:
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="form-input"
+            />
+          </div>
+          <button type="submit" className="login-button">
+            Login with Email/Password
+          </button>
+        </form>
+        {error && <p className="error-message">{error}</p>}
+        <p className="signup-text">
+          Don't have an account? <Link to="/signup" className="signup-link">Register</Link>
+        </p>
+      </div>
     </div>
   );
 };
