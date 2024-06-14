@@ -30,7 +30,6 @@ const Home = () => {
   return (
       <div className="home-container">
         <header className="header">
-          <img src="logo.png" alt="Logo" className="logo" />
           <div className="nav-buttons">
             <button className="nav-button" onClick={() => navigate(-1)} disabled={window.location.pathname === '/'}>
               Go Back

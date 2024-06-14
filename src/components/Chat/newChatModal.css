@@ -17,12 +17,13 @@
   border-radius: 8px;
   width: 400px;
   max-width: 90%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .new-chat-modal h2 {
   margin-top: 0;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  color: #764ba2;
 }
 
 .search-container {
@@ -32,31 +33,35 @@
 
 .search-container input {
   flex: 1;
-  padding: 8px;
-  font-size: 16px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 20px;
   outline: none;
   transition: border-color 0.3s ease;
 }
 
 .search-container input:focus {
-  border-color: #0084ff;
+  border-color: #764ba2;
+  box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.2);
 }
 
 .search-container button {
-  padding: 8px 16px;
-  font-size: 16px;
-  background-color: #007bff;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  background-color: #764ba2;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-left: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .search-container button:hover {
-  background-color: #0056b3;
+  background-color: #667eea;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
 .search-results {
@@ -65,18 +70,21 @@
   margin: 0;
   max-height: 300px;
   overflow-y: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .search-results li {
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 0.75rem 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .search-results li:hover {
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
 }
 
 .user-avatar {
@@ -98,32 +106,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ccc;
+  background-color: #764ba2;
   color: #fff;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: 500;
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
 
 .user-name {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 500;
 }
 
 .close-button {
-  margin-top: 10px;
-  padding: 8px 16px;
-  font-size: 16px;
+  margin-top: 20px;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
   background-color: #ccc;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .close-button:hover {
   background-color: #aaa;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }

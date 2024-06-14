@@ -4,6 +4,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Navigate } from 'react-router-dom';
 import { useUserContext } from './UserContext'; // Import useUserContext hook
+import './moodTracker.css';
 
 const MoodTracker = () => {
   const { user } = useUserContext(); // Get user from context
@@ -40,16 +41,46 @@ const MoodTracker = () => {
   return (
     <Layout>
       <div className="mood-tracker-container">
-        <h2>Track your mood</h2>
+        <h2 className="mood-tracker-title">Track your mood</h2>
         <div className="mood-selection">
-          {/* ... your mood selection buttons ... */}
+          <button
+            className={`mood-button ${selectedMood === 'happy' ? 'selected' : ''}`}
+            onClick={() => handleMoodSelect('happy')}
+          >
+            Happy
+          </button>
+          <button
+            className={`mood-button ${selectedMood === 'neutral' ? 'selected' : ''}`}
+            onClick={() => handleMoodSelect('neutral')}
+          >
+            Neutral
+          </button>
+          <button
+            className={`mood-button ${selectedMood === 'sad' ? 'selected' : ''}`}
+            onClick={() => handleMoodSelect('sad')}
+          >
+            Sad
+          </button>
+          <button
+            className={`mood-button ${selectedMood === 'angry' ? 'selected' : ''}`}
+            onClick={() => handleMoodSelect('angry')}
+          >
+            Angry
+          </button>
+          <button
+            className={`mood-button ${selectedMood === 'anxious' ? 'selected' : ''}`}
+            onClick={() => handleMoodSelect('anxious')}
+          >
+            Anxious
+          </button>
         </div>
         <textarea
           value={moodNotes}
           onChange={handleNotesChange}
           placeholder="Optional: Add notes about your mood"
+          className="mood-notes"
         />
-        <button onClick={submitMood} disabled={!selectedMood}>
+        <button onClick={submitMood} disabled={!selectedMood} className="submit-mood-button">
           Submit Mood
         </button>
       </div>
