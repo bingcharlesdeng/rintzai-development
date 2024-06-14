@@ -1,5 +1,5 @@
 .chat-window {
-  height: calc(100vh - 180px); /* Adjust the height to leave space for the input area */
+  height: calc(100vh - 180px);
   padding: 0.5rem;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 .message-list {
@@ -22,15 +23,17 @@
 
 .message {
   padding: 0.75rem 1rem;
-  border-radius: 4px;
+  border-radius: 20px;
   margin-bottom: 0.5rem;
   display: flex;
   max-width: 60%;
   word-wrap: break-word;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .message.sent {
-  background-color: #ddd;
+  background-color: #764ba2;
+  color: #fff;
   align-self: flex-end;
   border-bottom-right-radius: 0;
 }
@@ -60,8 +63,4 @@
   text-align: center;
   color: #aaa;
   font-style: italic;
-}
-.chat-window {
-  height: calc(100vh - 200px);
-  overflow-y: auto;
 }
